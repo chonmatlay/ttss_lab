@@ -4,11 +4,11 @@
 #define N 4
 #define FROM_MASTER 1
 #define FROM_SLAVE 2
-
+double a[N][N],b[N][N],c[N][N] ;
 void createMatrix(); 
 void printMatrix();
 int main(int argc , char *argv[]){
-	double a[N][N],b[N][N],c[N][N] ;
+
 	int numtasks ;
 	int taskid ;
 	int numworkers ;
@@ -103,21 +103,8 @@ int main(int argc , char *argv[]){
 		//}
 		double 	end=MPI_Wtime() ;
 		printf("total time : %f \n", end-start);
-		/*
-		 * print the matrix here
-		 * 
 
-		for (i=0 ; i <N ; i++){
-		for (j=0 ; j < N ; j++)
-			printf("%f ",a[i][j]);
-		printf("\n"); 
-	}
-	printf("\n");
-		for (i=0 ; i <N ; i++){
-		for (j=0 ; j < N ; j++)
-			printf("%f ",b[i][j]);
-		printf("\n"); 
-	}
+	
 	printf("\n");
 	
 		for (i=0 ; i <N ; i++){
@@ -126,7 +113,7 @@ int main(int argc , char *argv[]){
 		printf("\n"); 
 	}
 	printf("\n");
-	*/
+
 		
 		}
 	MPI_Finalize() ;
