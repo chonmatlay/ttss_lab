@@ -1,11 +1,11 @@
 #include "mpi.h" 
 #include <stdio.h> 
 #include <stdlib.h> 
-#define N 4
+#define N 100
 #define FROM_MASTER 1
 #define FROM_SLAVE 2
-double a[N][N],b[N][N],c[N][N] ;
-double aa[N][N],cc[N][N];
+int a[N][N],b[N][N],c[N][N] ;
+int aa[N][N],cc[N][N];
 void createMatrix(); 
 void printMatrix();
 int main(int argc , char *argv[]){
