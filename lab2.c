@@ -11,17 +11,17 @@ int main(int argc , char *argv[]){
 
 	int numtasks ;
 	int taskid ;
-	int numworkers ;
-	int source ; 
-	int dest ; 
-	int rows ; 
-	int offset ;
-	int divrow;
-	int r ;
+	long numworkers ;
+	long source ; 
+	long dest ; 
+	long rows ; 
+	long offset ;
+	long divrow;
+	long r ;
 	
 	int msgtype ;
 
-	int i, j , k,rc ;
+	long i, j , k,rc ;
 	MPI_Status status ;
 	
 	double start , end ;
