@@ -40,6 +40,12 @@ int main(int argc , char *argv[]){
 	numworkers= numtasks -1 ; 
 	divrow = N/numworkers ;
 		r = N%numworkers ; 
+
+		if (r!= 0 ){
+			printf("non divisible");
+			 MPI_Abort(MPI_COMM_WORLD,rc);
+			 exit(1);
+			 }
 /************ MAIN TASK *****************/
 	if (taskid ==0 ) {
 		//create matrix a and b
@@ -61,8 +67,7 @@ int main(int argc , char *argv[]){
 		msgtype = FROM_MASTER ;
 		
 		
-			if ( r != 0 ) 
-			MPI_Send(&aa[numworkers*divrow][0] , r*N , MPI_DOUBLE , numworkers , msgtype, MPI_COMM_WORLD);
+			
 		
 		}
 
@@ -75,9 +80,8 @@ int main(int argc , char *argv[]){
 		
 		msgtype = FROM_MASTER ; 
 		 
-		if (taskid == numtasks -1 && r != 0 ) MPI_Recv(&a[divrow][0] , r*N , MPI_DOUBLE , 0 , msgtype, MPI_COMM_WORLD , &status );  
-		 // calculate the matrix
-		int upperbound = taskid == numtasks - 1 ? divrow+r : divrow ;
+		
+		int upperbound = divrow ;
 		for (k=0 ; k<N ; k++ ) 
 			for (i=0 ; i<upperbound ; i++ ) {
 			c[i][k] = 0 ;
@@ -90,20 +94,11 @@ int main(int argc , char *argv[]){
 		msgtype = FROM_SLAVE ; 
 		//MPI_Send(&offset ,1 ,MPI_INT , 0 , msgtype , MPI_COMM_WORLD); 
 		//MPI_Send(&rows , 1 , MPI_INT , 0 , msgtype , MPI_COMM_WORLD ) ;
-		if (taskid == numtasks -1 && r != 0 ) 
-		  MPI_Send(&c[divrow][0] , r*N , MPI_DOUBLE ,0 ,msgtype , MPI_COMM_WORLD);
+
 	}
 	MPI_Gather(&cc, divrow * N , MPI_DOUBLE , &c , divrow*N,MPI_DOUBLE , 0 , MPI_COMM_WORLD);
 	if (taskid ==0 ){
-		msgtype = FROM_SLAVE ;
 		
-		//receive
-		
-		if ( r != 0 ) 
-		MPI_Recv(&cc[numworkers*divrow][0] , r*N , MPI_DOUBLE, numtasks-1 ,msgtype,MPI_COMM_WORLD, &status ) ;
-		//}
-		double 	end=MPI_Wtime() ;
-		printf("total time : %f \n", end-start);
 
 	
 	printf("\n");
