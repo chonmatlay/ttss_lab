@@ -98,7 +98,6 @@ int main(int argc , char *argv[]){
 		
 		//receive
 		
-		/
 		if ( r != 0 ) 
 		MPI_Recv(&c[numworkers*divrow][0] , r*N , MPI_DOUBLE, numtasks-1 ,msgtype,MPI_COMM_WORLD, &status ) ;
 		//}
