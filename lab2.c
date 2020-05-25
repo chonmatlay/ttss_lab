@@ -5,6 +5,7 @@
 #define FROM_MASTER 1
 #define FROM_SLAVE 2
 double a[N][N],b[N][N],c[N][N] ;
+double aa[N][N],cc[N][N];
 void createMatrix(); 
 void printMatrix();
 int main(int argc , char *argv[]){
@@ -45,7 +46,7 @@ int main(int argc , char *argv[]){
 		
 		for (i=0;i <N ; i++ ) 
 		for ( j =0 ;j < N ;j++){ 
-			a[i][j]= 1;
+			aa[i][j]= 1;
 			b[i][j] = 1 ;
 		}
 		
@@ -61,11 +62,11 @@ int main(int argc , char *argv[]){
 		
 		
 			if ( r != 0 ) 
-			MPI_Send(&a[numworkers*divrow][0] , r*N , MPI_DOUBLE , numworkers , msgtype, MPI_COMM_WORLD);
+			MPI_Send(&aa[numworkers*divrow][0] , r*N , MPI_DOUBLE , numworkers , msgtype, MPI_COMM_WORLD);
 		
 		}
 
-	MPI_Scatter(&a,divrow*N  ,MPI_DOUBLE, &a ,divrow*N , MPI_DOUBLE , 0 , MPI_COMM_WORLD );
+	MPI_Scatter(&aa,divrow*N  ,MPI_DOUBLE, &a ,divrow*N , MPI_DOUBLE , 0 , MPI_COMM_WORLD );
 	MPI_Bcast(&b,N*N, MPI_DOUBLE ,0 , MPI_COMM_WORLD );
 
 	/************** OTHER TASK ****************/
@@ -92,14 +93,14 @@ int main(int argc , char *argv[]){
 		if (taskid == numtasks -1 && r != 0 ) 
 		  MPI_Send(&c[divrow][0] , r*N , MPI_DOUBLE ,0 ,msgtype , MPI_COMM_WORLD);
 	}
-	MPI_Gather(&c, divrow * N , MPI_DOUBLE , &c , divrow*N,MPI_DOUBLE , 0 , MPI_COMM_WORLD);
+	MPI_Gather(&cc, divrow * N , MPI_DOUBLE , &c , divrow*N,MPI_DOUBLE , 0 , MPI_COMM_WORLD);
 	if (taskid ==0 ){
 		msgtype = FROM_SLAVE ;
 		
 		//receive
 		
 		if ( r != 0 ) 
-		MPI_Recv(&c[numworkers*divrow][0] , r*N , MPI_DOUBLE, numtasks-1 ,msgtype,MPI_COMM_WORLD, &status ) ;
+		MPI_Recv(&cc[numworkers*divrow][0] , r*N , MPI_DOUBLE, numtasks-1 ,msgtype,MPI_COMM_WORLD, &status ) ;
 		//}
 		double 	end=MPI_Wtime() ;
 		printf("total time : %f \n", end-start);
@@ -109,7 +110,7 @@ int main(int argc , char *argv[]){
 	
 		for (i=0 ; i <N ; i++){
 		for (j=0 ; j < N ; j++)
-			printf("%f ",c[i][j]);
+			printf("%f ",cc[i][j]);
 		printf("\n"); 
 	}
 	printf("\n");
